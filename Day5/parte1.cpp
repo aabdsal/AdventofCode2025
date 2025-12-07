@@ -10,13 +10,16 @@ typedef long long ll;
 
 int main(void)
 {
-    ll minimo, maximo;
-    bool separador = false;
-    char guion;
-    string linea;
+
     vector<pair<ll, ll>> rangos;
+    ll minimo, maximo, numero;
     int frescos = 0;
+
+    char guion;
+
     ifstream archivo("input.txt");
+    string linea;
+
     if (!archivo.is_open())
     {
         cerr << "Error al abrir el archivo." << endl;
@@ -25,10 +28,21 @@ int main(void)
 
     while (getline(archivo, linea))
     {
-        if (separador)
-        { // Seran frescos si se encuentran en algun rango, si estan fuera se consideraran estropeados
-            ll numero = stoll(linea);
-            for (const auto &rango : rangos)
+        if (linea.empty() || linea[0] == '\n')
+        {
+            continue;
+        }
+        istringstream ss(linea);
+        if (ss >> minimo >> guion >> maximo)
+        {
+            rangos.push_back({minimo, maximo});
+            continue;
+        }
+        ss.clear();
+        ss.str(linea);
+        if (ss >> numero)
+        {
+            for (auto &rango : rangos)
             {
                 if (numero >= rango.first && numero <= rango.second)
                 {
@@ -36,16 +50,7 @@ int main(void)
                     break; // Per a no comprobar mes rangos que si no peta tot
                 }
             }
-            continue;
         }
-        if (linea.empty() || linea[0] == '\n')
-        {
-            separador = true;
-            continue;
-        }
-        istringstream ss(linea);
-        ss >> minimo >> guion >> maximo;
-        rangos.push_back({minimo, maximo});
     }
     archivo.close();
     cout << frescos << endl;
