@@ -12,13 +12,13 @@ Repositorio para subir los códigos y las explicaciones de los problemas del Adv
     
 ---
 ## Entregables del proyecto
-Dia 3. parte2: Uso de Stack y Algortimo Voraz (Greedy).
+Dia 3: parte2: Uso de Stack y Algortimo Voraz (Greedy).
 
-Dia 3 (Ali): Programación dinámica maximizando el resultado (Ambas partes, corrige el que quieras).
+Dia 3/Ali: Programación dinámica maximizando el resultado (Ambas partes, corrige el que quieras).
 
 Dia 4: Archivo "Dia4Completo.cpp": Uso de grafos para contar cuantos vecinos tiene.
 
-Dia 5 (Ali): Uso de LinkedList (Ambas partes, corrige el que quieras).
+Dia 5/Ali : Uso de LinkedList (Ambas partes, corrige el que quieras).
 
 Dia 7, parte 2: Uso de Programacion dinamica para evitar recalcular subproblemas superpuestos.
 
@@ -115,6 +115,26 @@ AOC25/
 │     ├─ part2.cpp
 │     └─ input.txt
 ├─ Dia8/
+│  ├─ README.md
+│  ├─ part1.cpp
+│  ├─ part2.cpp
+│  └─ input.txt
+├─ Dia9/
+│  ├─ README.md
+│  ├─ part1.cpp
+│  ├─ part2.cpp
+│  └─ input.txt
+├─ Dia10/
+│  ├─ README.md
+│  ├─ part1.cpp
+│  ├─ part2.cpp
+│  └─ input.txt
+├─ Dia11/
+│  ├─ README.md
+│  ├─ part1.cpp
+│  ├─ part2.cpp
+│  └─ input.txt
+├─ Dia12/
 │  ├─ README.md
 │  ├─ part1.cpp
 │  ├─ part2.cpp
