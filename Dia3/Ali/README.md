@@ -1,22 +1,23 @@
-
-# DIA 3
+# DÍA 3
 ## ELECCIÓN DEL PROBLEMA
-Uso de un algoritmo visto en clase.
+Uso de un algoritmo de programación dinámica visto en clase para maximizar el resultado.
 ## ESTRUCTURA DE DATOS UTILIZADA
-Algoritmo de programacion dinamica maximizando el resultado.
-## COMO SE HA ABORDADO EL PROBLEMA
-Fijando un numero de digitos (2 o 12 en estos casos) y maximizando la solucion, aceptando o no la solucion en cada paso.
+Programación dinámica para maximización con restricciones de dígitos.
+## CÓMO SE HA ABORDADO EL PROBLEMA
+Se fijó un número de dígitos (2 o 12 según los casos) y se maximizó la solución tomando decisiones en cada paso (aceptar o rechazar posibilidades).
 ## ALTERNATIVAS
-Fuerza bruta o algoritmo voraz.
-## QUE SE HA APRENDIDO
-Nuevos usos para la programacion dinámica.
+Fuerza bruta o algoritmos voraces, aunque serían menos eficientes.
+## QUÉ SE HA APRENDIDO
+Nuevas aplicaciones y técnicas de programación dinámica para problemas de optimización con restricciones.
 ## COMPILAR Y EJECUTAR
-Priemro: En una terminal, asegurandote que estas en el directorio con los archivos, escribe/haz un "./part2" para ejecutar el archivo, dandote asi la solucion para el input que hay en el archivo "input.txt".
+**Para ejecutar con el input proporcionado:**  
+Primero: En una terminal, asegúrate de que estás en el directorio que contiene los archivos. Ejecuta `./part2` para obtener la solución correspondiente al archivo `input.txt`.
 
-(Opcional, si quieres probar con tu propio Input y resolver tu problema)
-Primero: Ir a la pagina web del Advent Of Code, entrar en el apartado de problemas propuestos del año 2025. 
-Segundo: Ir al Problema/Apartado 3 de los problemas que proponen y ver y copiar contenido de "get your puzzle input".
-Tercero: Pega el contenido en el archivo de este mismo directorio llamado "input.txt", reemplazando con tu input el contenido actual.
-Cuarto: Ya puedes compilar, en una terminal, asegurandote que estas en el directorio con los archivos, haz un "g++ -o nombreaelegir part2.cpp.
-Quinto: Simplemente ejecutalo, se te habra generado un archivo en el directorio llamado igual a "nombreaelegir", simplemente vuelve a escribir en la terminal "./nombreaelegir" y se ejecutara el archivo dandote la solucion al problema.
-PDD: Las comillas utilizadas son para recalcar y diferenciar la explicacion de las acciones, no tienes que colocarlas.
+**(Opcional) Para probar con tu propio input y resolver el problema:**  
+Primero: Ve a la página web del Advent of Code, accede a los problemas propuestos del año 2025.  
+Segundo: Dirígete al problema del día 3 y copia el contenido de "Get your puzzle input".  
+Tercero: Pega el contenido en el archivo `input.txt` de este directorio, reemplazando el contenido actual.  
+Cuarto: Compila el programa. En la terminal, dentro del directorio de los archivos, ejecuta `g++ -o <nombre_a_elegir> part2.cpp`.  
+Quinto: Ejecuta el programa con `./<nombre_a_elegir>`. Esto te dará la solución para tu input.
+
+**PD:** Las comillas utilizadas en las instrucciones son para recalcar y diferenciar la explicación de las acciones; no es necesario escribirlas.
