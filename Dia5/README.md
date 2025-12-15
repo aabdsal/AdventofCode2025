@@ -1,18 +1,23 @@
-# DIA 5
+# DÍA 5
 ## ELECCIÓN DEL PROBLEMA
-Problema tipico de intervalos donde se puede usar/impleemntar un Arbol de Intervalos para resolverlos, es diferente e interesante.
+Problema típico de intervalos donde se puede usar/implementar un Árbol de Intervalos para resolverlo. Es diferente e interesante.
 ## ESTRUCTURA DE DATOS UTILIZADA
-Arbol de Intervalos
-## COMO SE HA ABORDADO EL PROBLEMA
-Se ha implementado una Clase para la estructura de datos Arbol de Interavalos y otras dos estructuas que hacen de intervalos y de node del arbol de intervalos, se han agragado todos los intervalos del problema al arbol, luego se han "fusionado". Una vez el arbol contiene los intervalos fusionados para la parte1 del problema se ve si el valor que nos da se encuentra dentro de alguno de los intervalos (se recorre el arbol) y para la parte 2 solamente se calcula la suma de los rangos/longitud interna de cada intervalo.
+Árbol de Intervalos.
+## CÓMO SE HA ABORDADO EL PROBLEMA
+Se ha implementado una clase para la estructura de datos Árbol de Intervalos y otras dos estructuras que representan intervalos y nodos del árbol. Se han agregado todos los intervalos del problema al árbol y luego se han fusionado. Una vez que el árbol contiene los intervalos fusionados, para la parte 1 del problema se comprueba si el valor proporcionado se encuentra dentro de alguno de los intervalos (mediante un recorrido del árbol). Para la parte 2, simplemente se calcula la suma de las longitudes de cada intervalo.
 ## ALTERNATIVAS
-Uso de un vector de pares<inf, sup> para guardar todos los intervalos y luego ya ver cuales estan en los rangos (recorrer el vector) y la suma interna de los rangos de esos intervalos luego de fusionarlos. 
-## QUE SE HA APRENDIDO
-La correcta implementacion de un Arbol de Intervalos y la creacion de algunos metodos personalizados para este tipo de problema.
+Uso de un vector de pares <inicio, fin> para almacenar todos los intervalos, luego verificar cuáles están dentro de los rangos (recorriendo el vector) y calcular la suma de las longitudes de esos intervalos después de fusionarlos.
+## QUÉ SE HA APRENDIDO
+La correcta implementación de un Árbol de Intervalos y la creación de algunos métodos personalizados para este tipo de problema.
 ## COMPILAR Y EJECUTAR
-Primero: Ir a la pagina web del Advent Of Code, entrar en el apartado de problemas propuestos del año 2025
-Segundo: Ir al Problema/Apartado 5 de los problemas que proponen y ver y copiar contenido de "get your puzzle input".
-Tercero: Pega el contenido en el archivo de este mismo directorio llamado "input.txt", reemplazando con tu input el contenido actual.
-Cuarto: Ya puedes compilar, en una terminal, asegurandote que estas en el directorio con los archivos, haz un "g++ -o nombreaelegir Dia5Alternativo.cpp".
-Quinto: Simplemente ejecutalo, se te habra generado un archivo en el directorio llamado igual a "nombreaelegir", simplemente vuelve a escribir en la terminal "./nombreaelegir" y se ejecutara el archivo.
-PDD: Las comillas utilizadas son para recalcar y diferenciar la explicacion de las acciones, no tienes que colocarlas.
+**Para ejecutar con el input proporcionado:**  
+Primero: En una terminal, asegúrate de que estás en el directorio que contiene los archivos. Ejecuta `./main` para obtener la solución correspondiente al archivo `input.txt`.
+
+**(Opcional) Para probar con tu propio input y resolver el problema:**  
+Primero: Ve a la página web del Advent of Code, accede a los problemas propuestos del año 2025.  
+Segundo: Dirígete al problema del día 5 y copia el contenido de "Get your puzzle input".  
+Tercero: Pega el contenido en el archivo `input.txt` de este directorio, reemplazando el contenido actual.  
+Cuarto: Compila el programa. En la terminal, dentro del directorio de los archivos, ejecuta `g++ -o <nombre_a_elegir> Dia5Alternativo.cpp`.  
+Quinto: Ejecuta el programa con `./<nombre_a_elegir>`. Esto te dará la solución para tu input.
+
+**PD:** Las comillas utilizadas en las instrucciones son para recalcar y diferenciar la explicación de las acciones; no es necesario escribirlas.

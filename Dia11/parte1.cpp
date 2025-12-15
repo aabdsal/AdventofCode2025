@@ -17,18 +17,18 @@ private:
         Nodo(const string &c, const int &v) : key(c), valor(v) {}
     };
 
-    std::vector<std::list<Nodo>> tabla;
-    size_t capacidad;
-    size_t tamanio;
-    double umbralFactorCarga;
+    vector<list<Nodo>> tabla;
+    size_t max;
+    size_t tam;
+    double umbralFactorCarga; // Usado en rehashing para saber cuando aumentar el tamaño de la tabla (idea tomada de internet)
 
-    // DJB2 Funcion Hash, muy utilizada en strings, y es mejor que la suma de caracteres en ascii y la multiplicacion simple y polinomial
+    // DJB2 Funcion Hash, muy utilizada en strings, y es mejor que la suma de caracteres en ascii y la multiplicacion simple y polinomial (internet)
     size_t funcionHash(const string &key) const
     {
         size_t hash = 5381;
         for (char c : key)
         {
-            hash = ((hash << 5) + hash) + static_cast<size_t>(c); // hash * 33 + c
+            hash = ((hash << 5) + hash) + static_cast<size_t>(c);
         }
         return hash;
     }
@@ -36,43 +36,43 @@ private:
     size_t h(const string &key) const
     {
         size_t hash = funcionHash(key);
-        return hash % capacidad;
+        return hash % max;
     }
 
     void rehash()
     {
-        size_t nuevaCapacidad = capacidad * 2;
-        std::vector<std::list<Nodo>> nuevaTabla(nuevaCapacidad);
+        size_t nuevamax = max * 2;
+        vector<list<Nodo>> nuevaTabla(nuevamax);
 
         for (const auto &cubeta : tabla)
         {
             for (const auto &nodo : cubeta)
             {
-                size_t nuevoIndice = funcionHash(nodo.key) % nuevaCapacidad;
+                size_t nuevoIndice = funcionHash(nodo.key) % nuevamax;
                 nuevaTabla[nuevoIndice].push_back(nodo);
             }
         }
-        tabla = std::move(nuevaTabla);
-        capacidad = nuevaCapacidad;
+        tabla = move(nuevaTabla);
+        max = nuevamax;
     }
 
 public:
-    TablaHash(size_t capacidadInicial = 16)
-        : capacidad(capacidadInicial), tamanio(0), umbralFactorCarga(0.75)
+    TablaHash(size_t maxInicial = 16)
+        : max(maxInicial), tam(0), umbralFactorCarga(0.75)
     {
-        tabla.resize(capacidad);
+        tabla.resize(max);
     }
 
-    void insertar(const string &key, const int &valor)
+    void insert(const string &key, const int &valor)
     {
-        if ((double)tamanio / capacidad > umbralFactorCarga)
+        if ((double)tam / max > umbralFactorCarga)
         {
             rehash();
         }
 
         size_t indice = h(key);
 
-        for (auto &nodo : tabla[indice])
+        for (auto &nodo : tabla[indice]) // Se utiliza el & en la variable nodo para modificar el valor directamente en la tabla, no guardarlo en otra variable
         {
             if (nodo.key == key)
             {
@@ -82,10 +82,10 @@ public:
         }
 
         tabla[indice].push_back(Nodo(key, valor));
-        tamanio++;
+        tam++;
     }
 
-    int *buscar(const string &key)
+    int *search(const string &key) // Version no constante
     {
         size_t indice = h(key);
 
@@ -100,7 +100,7 @@ public:
         return nullptr;
     }
 
-    const int *buscar(const string &key) const
+    const int *search(const string &key) const // Sobrecarga para version constante (variables constantes), son iguales, pero una acepta constantes y la otra no
     {
         size_t indice = h(key);
 
@@ -115,9 +115,9 @@ public:
         return nullptr;
     }
 
-    bool contiene(const string &key) const
+    bool contains(const string &key) const
     {
-        return buscar(key) != nullptr;
+        return search(key) != nullptr;
     }
 
     int &operator[](const string &key)
@@ -133,11 +133,11 @@ public:
         }
 
         tabla[indice].push_back(Nodo(key, 0));
-        tamanio++;
+        tam++;
         return tabla[indice].back().valor;
     }
 
-    bool eliminar(const string &key)
+    bool remove(const string &key)
     {
         size_t indice = h(key);
 
@@ -147,7 +147,7 @@ public:
             if (it->key == key)
             {
                 cubeta.erase(it);
-                tamanio--;
+                tam--;
                 return true;
             }
         }
@@ -155,9 +155,9 @@ public:
         return false;
     }
 
-    size_t obtenerTamanio() const { return tamanio; }
-    size_t obtenerCapacidad() const { return capacidad; }
-    bool vacia() const { return tamanio == 0; }
+    size_t getSize() const { return tam; }
+    size_t getMax() const { return max; }
+    bool empty() const { return tam == 0; }
 };
 
 class Grafo
@@ -167,18 +167,18 @@ private:
 
     TablaHash texto_a_id;
 
-    std::vector<string> id_a_texto;
-    std::vector<std::vector<int>> adyacencia;
+    vector<string> id_a_texto;
+    vector<vector<int>> adyacencia;
 
     int obtenerID(const string &vertice) const
     {
-        const int *id = texto_a_id.buscar(vertice); // Metodos de la clase TablaHash implementada arriba
+        const int *id = texto_a_id.search(vertice);
         if (id != nullptr)
             return *id;
         return -1;
     }
 
-    long long contarCaminosDP(const string &inicio, const string &objetivo, std::vector<long long> &memo) const
+    long long contarCaminosDP(const string &inicio, const string &objetivo, vector<long long> &memo) const
     {
         if (inicio == objetivo)
             return 1;
@@ -198,7 +198,7 @@ public:
     ~Grafo() = default;
 
     bool dirigido() const { return esDirigido; }
-    int numeroVertices() const { return static_cast<int>(id_a_texto.size()); }
+    int numeroVertices() const { return (int)(id_a_texto.size()); }
     int numeroAristas() const
     {
         int total = 0;
@@ -211,10 +211,10 @@ public:
 
     void agregarVertice(string &vertice)
     {
-        if (!texto_a_id.contiene(vertice))
+        if (!texto_a_id.contains(vertice))
         {
-            int id = static_cast<int>(id_a_texto.size());
-            texto_a_id.insertar(vertice, id);
+            int id = (int)(id_a_texto.size());
+            texto_a_id.insert(vertice, id);
             id_a_texto.push_back(vertice);
             adyacencia.resize(id + 1);
         }
@@ -251,7 +251,7 @@ public:
 
     bool existeVertice(const string &vertice) const
     {
-        return texto_a_id.contiene(vertice);
+        return texto_a_id.contains(vertice);
     }
 
     long long contarCaminos(const string &origen, const string &destino) const
@@ -263,7 +263,7 @@ public:
 
         if (esDirigido)
         {
-            std::vector<long long> memo(id_a_texto.size(), -1);
+            vector<long long> memo(id_a_texto.size(), -1);
             return contarCaminosDP(origen, destino, memo);
         }
         return 0;

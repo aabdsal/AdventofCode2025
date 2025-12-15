@@ -9,7 +9,6 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
-#include <memory> // Para std::shared_ptr y std::make_shared (punteros inteligentes que manejan memoria automaticamente). Per a poder manejar memoria compartida de manera segura.
 #include <algorithm>
 
 using namespace std;
@@ -29,8 +28,8 @@ struct ItvTreeNode
 {
     Intervalo itv;
     T max;
-    std::shared_ptr<ItvTreeNode> izq;
-    std::shared_ptr<ItvTreeNode> der;
+    ItvTreeNode *izq;
+    ItvTreeNode *der;
 
     ItvTreeNode(const Intervalo &i) : itv(i), max(i.sup), izq(nullptr), der(nullptr) {}
 };
@@ -38,9 +37,19 @@ struct ItvTreeNode
 class ItvTree
 {
 private:
-    std::shared_ptr<ItvTreeNode> root;
+    ItvTreeNode *root;
 
-    void collectIntervals(std::shared_ptr<ItvTreeNode> node, std::vector<Intervalo> &intervals) // Recorre el árbol en orden y recoge y guarda los intervalos en un vector
+    void deleteTree(ItvTreeNode *node) // Para gestionar la memoria del árbol, se usa en el destructor
+    {
+        if (node)
+        {
+            deleteTree(node->izq);
+            deleteTree(node->der);
+            delete node;
+        }
+    }
+
+    void collectIntervals(ItvTreeNode *node, std::vector<Intervalo> &intervals) // Recorre el árbol en orden y recoge y guarda los intervalos en un vector
     {
         if (node)
         {
@@ -50,11 +59,11 @@ private:
         }
     }
 
-    std::shared_ptr<ItvTreeNode> insert(std::shared_ptr<ItvTreeNode> node, const Intervalo &i) // Inserta un nuevo intervalo en el árbol
+    ItvTreeNode *insert(ItvTreeNode *node, const Intervalo &i) // Inserta un nuevo intervalo en el árbol
     {
         if (!node)
         {
-            return std::make_shared<ItvTreeNode>(i);
+            return new ItvTreeNode(i);
         }
         if (i.inf < node->itv.inf)
         {
@@ -72,6 +81,13 @@ private:
     }
 
 public:
+    ItvTree() : root(nullptr) {}
+
+    ~ItvTree() // Destructor para liberar memoria
+    {
+        clear();
+    }
+
     void insert(const Intervalo &i) // Funcion publica para insertar un intervalo, llama a la funcion privada
     {
         root = insert(root, i);
@@ -86,11 +102,11 @@ public:
         std::sort(intervals.begin(), intervals.end(),
                   [](const Intervalo &a, const Intervalo &b)
                   { return a.inf < b.inf; });
-        
+
         std::vector<Intervalo> merged; // Vector per a guardar els intervals fusionats
-        for (const auto &interval : intervals) 
+        for (const auto &interval : intervals)
         {
-            if (merged.empty() || merged.back().sup < interval.inf - 1) 
+            if (merged.empty() || merged.back().sup < interval.inf - 1)
             {
                 merged.push_back(interval);
             }
@@ -109,7 +125,7 @@ public:
 
     bool inInterval(const T &point) // Comprueba si un punto está dentro de algún intervalo del árbol
     {
-        std::shared_ptr<ItvTreeNode> current = root;
+        ItvTreeNode *current = root;
         while (current)
         {
             if (point >= current->itv.inf && point <= current->itv.sup)
@@ -142,6 +158,7 @@ public:
 
     void clear() // Limpia el árbol
     {
+        deleteTree(root);
         root = nullptr;
     }
 };
