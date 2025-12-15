@@ -15,9 +15,9 @@ Repositorio para subir los códigos y las explicaciones de los problemas del Adv
 
 Dia 3/Ali: Programación dinámica maximizando el resultado (Ambas partes, corrige el que quieras).
 
-Dia 5 : 
+Dia 5/Dia5Alternativo.cpp: Uso de arbol de intervalos para guardar y fusionar los intervalos dados.
 
-Dia 11 :
+Dia 11/parte2.cpp: Implementacion de Grafos y una TablaHash usada para mapear de forma interna los nodos de los grafos para mayor velocidad.
 
 > Dentro de la carpeta de los días que entregamos, encontrarás un breve README explicando la forma en la que se ha resuelto el problema y justificando el uso de la estructura
 ---
@@ -32,5 +32,7 @@ Dia 11 :
   - `Algoritmos voraces (greedy)`
   - `Priority queues`
   - `Min-Heap`
+  - `TablaHash`
+  - `Arbol de Intervalos`
   - `Grafos`
 ---
