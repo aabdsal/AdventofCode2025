@@ -13,7 +13,7 @@ Repositorio para subir los códigos y las explicaciones de los problemas del Adv
 ---
 ## Entregables del proyecto
 
-Dia 3/Ali: Programación dinámica maximizando el resultado (Ambas partes, corrige el que quieras).
+Dia 3/Ali/part2.cpp: Programación dinámica maximizando el resultado.
 
 Dia 5/Dia5Alternativo.cpp: Uso de arbol de intervalos para guardar y fusionar los intervalos dados.
 
