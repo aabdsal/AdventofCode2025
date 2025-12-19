@@ -14,48 +14,42 @@
 using namespace std;
 
 typedef long long ll;
-typedef long T;
+typedef long T; // Tipo de datos para los extremos de los intervalos, le puse T para asemejarlo a un template
 
 struct Intervalo
 {
-    T inf;
-    T sup;
+    T inf;          // Limite inferior del intervalo
+    T sup;          // Limite superior del intervalo
+    T rango() const // Devuelve la longitud del intervalo
+    {
+        return ((sup - inf) + 1);
+    }
 
-    Intervalo(T l, T h) : inf(l), sup(h) {}
+    Intervalo(T l, T h) : inf(l), sup(h) {} // Constructor del intervalo
 };
 
 struct ItvTreeNode
 {
-    Intervalo itv;
-    T max;
-    ItvTreeNode *izq;
-    ItvTreeNode *der;
+    Intervalo itv;    // Intervalo almacenado en el nodo
+    T max;            // Valor máximo en el subárbol con raíz en este nodo
+    ItvTreeNode *izq; // Hijo izquierdo
+    ItvTreeNode *der; // Hijo derecho
 
-    ItvTreeNode(const Intervalo &i) : itv(i), max(i.sup), izq(nullptr), der(nullptr) {}
+    ItvTreeNode(const Intervalo &i) : itv(i), max(i.sup), izq(nullptr), der(nullptr) {} // Constructor del nodo
 };
 
 class ItvTree
 {
 private:
-    ItvTreeNode *root;
+    ItvTreeNode *root; // Nodo raíz del árbol
 
-    void deleteTree(ItvTreeNode *node) // Para gestionar la memoria del árbol, se usa en el destructor
+    void deleteTree(ItvTreeNode *node) // Para gestionar la memoria del árbol, se usa en el destructor, se llama recursivamente liberando cada nodo.
     {
         if (node)
         {
             deleteTree(node->izq);
             deleteTree(node->der);
-            delete node;
-        }
-    }
-
-    void collectIntervals(ItvTreeNode *node, std::vector<Intervalo> &intervals) // Recorre el árbol en orden y recoge y guarda los intervalos en un vector
-    {
-        if (node)
-        {
-            collectIntervals(node->izq, intervals);
-            intervals.push_back(node->itv);
-            collectIntervals(node->der, intervals);
+            delete (node);
         }
     }
 
@@ -63,9 +57,9 @@ private:
     {
         if (!node)
         {
-            return new ItvTreeNode(i);
+            return new ItvTreeNode(i); // Crear un nuevo nodo si el nodo actual es nulo
         }
-        if (i.inf < node->itv.inf)
+        if (i.inf < node->itv.inf) // Insertar en el subárbol izquierdo o derecho según el límite inferior
         {
             node->izq = insert(node->izq, i);
         }
@@ -73,17 +67,59 @@ private:
         {
             node->der = insert(node->der, i);
         }
-        if (node->max < i.sup)
+        if (node->max < i.sup) // Actualizar el valor máximo del nodo
         {
             node->max = i.sup;
         }
-        return node;
+        return (node);
+    }
+    ItvTreeNode *MergeUtil(ItvTreeNode *node) // Función recursiva para fusionar intervalos que se solapan
+    {
+        if (!node) // Caso base
+        {
+            return (nullptr); // Nodo nulo
+        }
+
+        // Fusionar en subárbol izquierdo y derecho (postorden)
+        node->izq = MergeUtil(node->izq);
+        node->der = MergeUtil(node->der);
+
+        // Comprobar si el intervalo actual se solapa con el izquierdo
+        if (node->izq && node->izq->itv.sup >= node->itv.inf - 1)
+        {
+            node->itv.inf = min(node->izq->itv.inf, node->itv.inf);
+            node->itv.sup = max(node->izq->itv.sup, node->itv.sup);
+            ItvTreeNode *temp = node->izq;
+            node->izq = temp->izq;
+            delete (temp);
+        }
+
+        // Comprobar si el intervalo actual se solapa con el derecho
+        if (node->der && node->der->itv.inf <= node->itv.sup + 1)
+        {
+            node->itv.inf = min(node->der->itv.inf, node->itv.inf);
+            node->itv.sup = max(node->der->itv.sup, node->itv.sup);
+            ItvTreeNode *temp = node->der;
+            node->der = temp->der;
+            delete (temp);
+        }
+
+        return (node);
+    }
+
+    ll sumaRec(ItvTreeNode *node) // Función recursiva para calcular la suma de las longitudes de los intervalos
+    {
+        if (!node)
+        {
+            return (0);
+        }
+        return (node->itv.rango() + sumaRec(node->izq) + sumaRec(node->der)); // Suma la longitud del intervalo actual y las longitudes de los subárboles izquierdo y derecho
     }
 
 public:
     ItvTree() : root(nullptr) {}
 
-    ~ItvTree() // Destructor para liberar memoria
+    ~ItvTree() // Destructor para liberar memoria, llama a la función clear, que a su vez llama a deleteTree
     {
         clear();
     }
@@ -93,46 +129,21 @@ public:
         root = insert(root, i);
     }
 
-    void Merge() // Fusiona los intervalos que se solapen en el árbol
+    ItvTreeNode *Merge() // Fusiona los intervalos que se solapen en el árbol, llama a la función privada MergeUtil
     {
-        std::vector<Intervalo> intervals;
-        collectIntervals(root, intervals);
-
-        // Funció lambda per a ordenar els intervals per el seu extrem inferior
-        std::sort(intervals.begin(), intervals.end(),
-                  [](const Intervalo &a, const Intervalo &b)
-                  { return a.inf < b.inf; });
-
-        std::vector<Intervalo> merged; // Vector per a guardar els intervals fusionats
-        for (const auto &interval : intervals)
-        {
-            if (merged.empty() || merged.back().sup < interval.inf - 1)
-            {
-                merged.push_back(interval);
-            }
-            else
-            {
-                merged.back().sup = std::max(merged.back().sup, interval.sup);
-            }
-        }
-
-        clear();
-        for (const auto &interval : merged)
-        {
-            insert(interval);
-        }
+        return (MergeUtil(root));
     }
 
     bool inInterval(const T &point) // Comprueba si un punto está dentro de algún intervalo del árbol
     {
-        ItvTreeNode *current = root;
+        ItvTreeNode *current = root; // Empezar desde la raíz
         while (current)
         {
-            if (point >= current->itv.inf && point <= current->itv.sup)
+            if (point >= current->itv.inf && point <= current->itv.sup) // Si el punto está dentro del intervalo actual
             {
-                return true;
+                return (true); // Decimos que si
             }
-            if (current->izq && current->izq->max >= point)
+            if (current->izq && current->izq->max >= point) // Sino, decidimos si ir al hijo izquierdo o derecho
             {
                 current = current->izq;
             }
@@ -141,22 +152,15 @@ public:
                 current = current->der;
             }
         }
-        return false;
+        return (false);
     }
 
-    ll sumaInternasItv() // Calcula la suma de las longitudes de todos los intervalos en el árbol
+    ll sumaInternasItv() // Calcula la suma de las longitudes de todos los intervalos en el árbol, llama a la función privada sumaRec
     {
-        std::vector<Intervalo> intervals;
-        collectIntervals(root, intervals);
-        long long suma = 0;
-        for (const auto &interval : intervals)
-        {
-            suma += (interval.sup - interval.inf + 1);
-        }
-        return suma;
+        return (sumaRec(root));
     }
 
-    void clear() // Limpia el árbol
+    void clear() // Limpia el árbol llamando a deleteTree y establece la raíz a nulo
     {
         deleteTree(root);
         root = nullptr;
@@ -165,8 +169,8 @@ public:
 
 int main(void)
 {
-    ItvTree tree;
-    ll minimo, maximo, numero;
+    ItvTree tree;              // Instancia del árbol de intervalos
+    ll minimo, maximo, numero; // Variables para los límites de los intervalos y el número a comprobar
     int frescos = 0;
 
     char guion;
@@ -178,31 +182,31 @@ int main(void)
         cerr << "Error al abrir el archivo." << endl;
         return 1;
     }
-    while (getline(archivo, linea))
+
+    while (getline(archivo, linea) && !linea.empty()) // Leer intervalos hasta una línea vacía
     {
-        if (linea.empty() || linea[0] == '\n')
-        {
-            continue;
-        }
         istringstream ss(linea);
         if (ss >> minimo >> guion >> maximo)
         {
             tree.insert(Intervalo(minimo, maximo));
-            continue;
         }
-        tree.Merge(); // Fusiona los intervalos que se solapen
-        ss.clear();
-        ss.str(linea);
+    }
+
+    tree.Merge(); // Fusiono los intervalos que se solapan
+
+    while (getline(archivo, linea)) // Sigo a partir de los numeros
+    {
+        istringstream ss(linea);
         if (ss >> numero)
         {
-            if (tree.inInterval(numero))
+            if (tree.inInterval(numero)) // Compruebo si el número está en algún intervalo
             {
-                ++frescos;
+                ++frescos; // Si estan, se consideran frescos
             }
         }
     }
     archivo.close();
-    ll count = tree.sumaInternasItv();
+    ll count = tree.sumaInternasItv(); // Suma de las longitudes de los intervalos
 
     cout << "Cantidad de alimentos aun frescos (parte1): " << frescos << endl;
     cout << "Suma de longitud de intervalos (parte 2): " << count << endl;
