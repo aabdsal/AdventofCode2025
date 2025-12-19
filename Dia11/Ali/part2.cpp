@@ -5,6 +5,7 @@
 
 using namespace std;
 #define ull unsigned long long
+
 // He de crear una tabla hash que a la posicio aaa me duga a bbb i you
 // Al final lo dificil del grafo es el algoritme de busqueda, pero la estrucutra es una hash table
 
@@ -86,9 +87,14 @@ public:
     int getPos(string key){
         return hash(key);
     }
-    int getSize() { return max; }
-    int getBucketSize(int i) { return tabla[i].size(); }
+    int getSize(){ 
+        return max; 
+    }
+    int getBucketSize(int i){ 
+        return tabla[i].size(); 
+    }
 };
+
 class Grafo
 {
 private:

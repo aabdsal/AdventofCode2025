@@ -2,9 +2,9 @@
 ## ELECCIÓN DEL PROBLEMA
 Problema típico de resolución usando grafos. Como para implementar grafos se necesita poder mapear los nodos para acceder a ellos de forma rápida, también se podía implementar una tabla hash.
 ## ESTRUCTURA DE DATOS UTILIZADA
-Grafo dirigido típico, tabla hash y programación dinámica para optimizar y reducir los costes temporales al buscar, recorrer y contar caminos.
+Grafo dirigido y tabla hash para optimizar y reducir los costes temporales al buscar, recorrer y contar caminos.
 ## CÓMO SE HA ABORDADO EL PROBLEMA
-Se implementó una clase para la estructura de datos "Grafo" y otra para la "TablaHash". Se introdujeron todos los nodos del grafo y sus vecinos en la estructura del grafo, creando así las aristas. Estos nodos se mapearon para poder acceder a ellos de forma más eficiente usando la clase/estructura TablaHash. Una vez construido el grafo, se utilizó un algoritmo similar al BFS para encontrar todos los caminos que existen desde un nodo a otro, el cual emplea programación dinámica para optimizar la ejecución.
+Se implementó una clase para la estructura de datos "Grafo" y otra para la "HashTable". Se introdujeron todos los nodos del grafo y sus vecinos en la estructura del grafo, creando así las aristas. Estos nodos se mapearon para poder acceder a ellos de forma más eficiente usando la clase/estructura HashTable. Una vez construido el grafo, se utilizó un algoritmo similar al DFS para encontrar todos los caminos que existen desde un nodo a otro.
 ## ALTERNATIVAS
 Probablemente también se hubiese podido resolver con matrices, algún recorrido alternativo a los grafos o incluso con algunos tipos de árboles.
 ## QUÉ SE HA APRENDIDO
