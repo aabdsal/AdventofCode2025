@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <limits>
 
 #define nBateries 2
 using namespace std;
@@ -15,7 +16,7 @@ int inf = numeric_limits<int>::min();
 
 int maxBat(string &l1, int i, int j, vector <vector<int> > &memo){
 	// casos base
-    if (j == 2) {return 0;}
+    if (j == nBateries) {return 0;}
 	else if(i >= l1.size()) {return -inf;}
     else if (memo[i][j] != -1) {return memo[i][j];}
     
@@ -44,6 +45,7 @@ int main(int argc, char const *argv[])
 
     while (getline(fich, l1))
     {
+        if (l1.back() == '\r') l1.pop_back(); // caracter perillos que esta al final
         int estadoBusqueda = 0;
         vector <vector<int> > memo(l1.size(),vector<int>(nBateries + 1,-1));
         count += maxBat(l1, 0, estadoBusqueda, memo);

@@ -20,8 +20,8 @@ long inf = numeric_limits<long>::min();
 
 long maxBat(string &l1, int i, int j, vector <vector<long> > &memo){
 	// casos base
-    if (j == 12) {return 0;}
-	else if(i >= l1.size()) {return inf;}
+    if (j == nBateries) {return 0;}
+	else if(i >= l1.size()) {return -inf;}
     else if (memo[i][j] != -1) {return memo[i][j];}
     
 	// casos general + memoria
@@ -38,6 +38,7 @@ int main(int argc, char const *argv[])
     long count = 0;  
     while (getline(fich, l1))
     {
+        if (l1.back() == '\r') l1.pop_back(); // caracter perillos que esta al final
         int estadoBusqueda = 0;
         vector <vector<long> > memo(l1.size(),vector<long>(nBateries + 1,-1));
         count += maxBat(l1, 0, estadoBusqueda, memo);
